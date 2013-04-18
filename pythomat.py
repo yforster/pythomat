@@ -5,22 +5,32 @@ import subprocess
 import re
 from mechanize import Browser
 import glob
+import datetime
+import time
 
 # Downloads a single file form url to path and names it filename
-def download(url,filename="",path=""):
+def download(url,filename="",path="",check=False):
 	try :
 		if (filename == "") :
 			filename = filename = url.split("/")[-1]
-		br = Browser()
-		br.retrieve(url,path + filename)
-		print("Downloaded " + url + " succesfully")
+		do_download = True
+		if(check and os.path.isfile(path+filename)) :
+			br = Browser()
+			br.open(url)
+			remote_time = time.strptime(br.response().info()["last-modified"], "%a, %d %b %Y %H:%M:%S GMT")
+			local_time  = time.gmtime((os.stat(path + filename).st_mtime))
+			do_download = (remote_time > local_time)
+		if(do_download) :
+			br = Browser()
+			br.retrieve(url,path + filename)
+			print("Downloaded " + url + " succesfully")
 	except :
 		print("Failed: " + url)
 
 # Downloads all given urls via download(...)
 def batchDownload(urls):
     for url in urls :
-        download(url)    
+        download(url, check = True)    
 	        
 # Downloads all files with links containing pattern on path to destpath
 def downloadAll(path,pattern="",destpath="") :
@@ -38,7 +48,7 @@ def downloadYoutube(id,saveto = "", overwrite = True):
 		subprocess.call("youtube-dl -t \"" + path + "\"", shell=True)
 	
 # Parses .ini file and executes the given Downloads
-def downloadFromIni(inipath="pythomat2.ini") :
+def downloadFromIni(inipath="pythomat.ini") :
 	ini = ConfigParser.ConfigParser()
 	ini.read(inipath)
 	for section in ini.sections() :
@@ -56,7 +66,7 @@ def downloadFromIni(inipath="pythomat2.ini") :
 				name = ini.get(section, "name")
 			except :
 				name = ""
-			download(path,name,saveto)
+			download(path,name,saveto,check = True)
 		elif mode == "batch" :
 			pattern = ini.get(section,"pattern")
 			downloadAll(path,pattern,saveto)
