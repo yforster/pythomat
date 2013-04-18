@@ -27,9 +27,7 @@ def downloadAll(path,pattern="",destpath="") :
 	br = Browser()
 	br.open(path)
 	for link in br.links(url_regex=pattern) :
-		if (not link.startswith("http://")) :
-			link = path[:path.rfind("/")+1]+url
-		download(link,"",destpath)
+		download(link.base_url[:link.base_url.rfind("/")+1] + link.url, path = destpath)
 
 # Downloads YouTuve-Video with id to saveto and overwrites (or not)
 def downloadYoutube(id,saveto = "", overwrite = True):
@@ -40,7 +38,7 @@ def downloadYoutube(id,saveto = "", overwrite = True):
 		subprocess.call("youtube-dl -t \"" + path + "\"", shell=True)
 	
 # Parses .ini file and executes the given Downloads
-def downloadFromIni(inipath="pythomat.ini") :
+def downloadFromIni(inipath="pythomat2.ini") :
 	ini = ConfigParser.ConfigParser()
 	ini.read(inipath)
 	for section in ini.sections() :
