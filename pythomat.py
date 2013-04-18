@@ -9,7 +9,7 @@ import datetime
 import time
 
 # Downloads a single file form url to path and names it filename
-def download(url,filename="",path="",check=False):
+def download(url,filename="",path="",check=True):
 	try :
 		if (filename == "") :
 			filename = filename = url.split("/")[-1]
@@ -22,9 +22,12 @@ def download(url,filename="",path="",check=False):
 			do_download = (remote_time > local_time)
 		if(do_download) :
 			br = Browser()
-			br.retrieve(url,path + filename)
+			os.chdir(path)
+			br.retrieve(url,filename)
 			print("Downloaded " + url + " succesfully")
-	except :
+		else :
+			print(url + " exists already")
+	except:
 		print("Failed: " + url)
 
 # Downloads all given urls via download(...)
