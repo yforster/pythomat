@@ -40,7 +40,10 @@ def downloadAll(path,pattern="",destpath="") :
 	br = Browser()
 	br.open(path)
 	for link in br.links(url_regex=pattern) :
-		download(link.base_url[:link.base_url.rfind("/")+1] + link.url, path = destpath)
+		if(link.url.startswith("http://")) :
+			download(link.url, path = destpath)
+		else :
+			download(link.base_url[:link.base_url.rfind("/")+1] + link.url, path = destpath)
 
 # Downloads YouTuve-Video with id to saveto and overwrites (or not)
 def downloadYoutube(id,saveto = "", overwrite = True):
