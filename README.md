@@ -32,13 +32,13 @@ Hier eine Beispieldatei, die ein einzelnes Skript herunterlädt.
 Es stehen aktuell die folgenden Modes zur Verfügung:
 
 	single		Lädt eine einzelne Datei herunter, falls sie auf dem Server geändert wurde. 
-			Benötigt path und saveto.
+				Benötigt path und saveto.
 	youtube		Lädt ein einzelnes YouTube-Video der gegebenen id herunter. 
-			Benötigt path und saveto.
+				Benötigt path und saveto.
 	batch		Durchsucht eine Seite nach Links und lädt alle diese Dateien herunter. 
-			Benötigt path, saveto und pattern.
+				Benötigt path, saveto und pattern.
 	prog2 		Loggt sich in die Prog2-Seite ein, durchsucht sie nach neuen Videos und lädt diese,
-			falls sie noch nicht existieren, herunter. Benötigt saveto, user und pass.
+				falls sie noch nicht existieren, herunter. Benötigt saveto, user und pass.
 
 Weitere Modi lassen sich schnell selbst erstellen. Sollte man keinerlei Programmierkenntnisse haben, sind Anfragen unter Issues auch eine Möglichkeit.
 
