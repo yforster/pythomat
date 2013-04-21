@@ -7,15 +7,15 @@ Der Pythomat ist leicht erweiterbar, klein und (relativ) schnell installiert. Er
 
 # Voraussetzungen
 
-Python 2.6 (nicht Python 3!) und mechanize werden benötigt.
+Python 2.7 (nicht Python 3.x!) und mechanize werden benötigt.
 
 # Installation
 
-- Python 2.6 (irgendwas > 2.3 reicht zur Not auch) von http://python.org herunterladen und installieren.
+- Python 2.7 (irgendwas > 2.3 reicht zur Not auch) von http://python.org herunterladen und installieren.
 - setuptools von https://pypi.python.org/pypi/setuptools herunterladen und installieren
 - in der Konsole 'easy_install mechanize' eingeben
 - einen Ordner pythomat anlegen
-- youtube-dl von http://rg3.github.io/youtube-dl/ herunterladen und in den Ordner verschieben
+- youtube-dl von http://rg3.github.io/youtube-dl/ herunterladen und in den Ordner verschieben oder global installieren
 - pythomat.py herunterladen und in den Ordner verschieben
 
 # Konfiguration
@@ -26,19 +26,19 @@ Hier eine Beispieldatei, die ein einzelnes Skript herunterlädt.
 
 	[VorlesungsSkript]
 	path = http://www.vorlesung.de/skript.pdf
-	saveto = C:\Users\Beispiel
+	saveto = C:\Users\Beispiel\
 	mode = single
 
 Es stehen aktuell die folgenden Modes zur Verfügung:
 
 	single		Lädt eine einzelne Datei herunter, falls sie auf dem Server geändert wurde. 
-			Benötigt path und saveto.
+				Benötigt path und saveto.
 	youtube		Lädt ein einzelnes YouTube-Video der gegebenen id herunter. 
-			Benötigt path und saveto.
+				Benötigt path und saveto.
 	batch		Durchsucht eine Seite nach Links und lädt alle diese Dateien herunter. 
-			Benötigt path, saveto und pattern.
+				Benötigt path, saveto und pattern.
 	prog2 		Loggt sich in die Prog2-Seite ein, durchsucht sie nach neuen Videos und lädt diese,
-			falls sie noch nicht existieren, herunter. Benötigt saveto, user und pass.
+				falls sie noch nicht existieren, herunter. Benötigt saveto, user und pass.
 
 Weitere Modi lassen sich schnell selbst erstellen. Sollte man keinerlei Programmierkenntnisse haben, sind Anfragen unter Issues auch eine Möglichkeit.
 
