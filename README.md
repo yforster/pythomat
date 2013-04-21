@@ -29,7 +29,7 @@ Hier eine Beispieldatei, die ein einzelnes Skript herunterlädt.
 	saveto = C:\Users\Beispiel\
 	mode = single
 
-Es stehen aktuell die folgenden Modes zur Verfügung:
+Es stehen die folgenden Standard-Modi zur Verfügung:
 
 	single		Lädt eine einzelne Datei herunter, falls sie auf dem Server geändert wurde. 
 				Benötigt path und saveto.
@@ -37,11 +37,11 @@ Es stehen aktuell die folgenden Modes zur Verfügung:
 				Benötigt path und saveto.
 	batch		Durchsucht eine Seite nach Links und lädt alle diese Dateien herunter. 
 				Benötigt path, saveto und pattern.
-	prog2 		Loggt sich in die Prog2-Seite ein, durchsucht sie nach neuen Videos und lädt diese,
-				falls sie noch nicht existieren, herunter. Benötigt saveto, user und pass.
+	module 		Lädt %name.py und führt %name.start(items) aus. items ist dabei ein Dictionary, das die
+				Einstellungen enthält.
+				
+Hier steht ein zusätzliches Modul zur Verfügung:
+	prog2		Lädt die aktuellen Youtube-Videos der Vorlesung herunter.
+				Benötigt user, pass und saveto.
 
 Weitere Modi lassen sich schnell selbst erstellen. Sollte man keinerlei Programmierkenntnisse haben, sind Anfragen unter Issues auch eine Möglichkeit.
-
-# Roadmap
-
-- Erweiterungen des Skripts lassen sich zwar leicht schreiben, aber schlecht verbreiten. Eine Modularisierung wäre nett.
