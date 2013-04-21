@@ -49,7 +49,6 @@ def downloadAll(url ,pattern = "", saveto = "", suffix = "") :
 
 # Downloads YouTuve-Video with id to saveto and overwrites (or not)
 def downloadYoutube(id, saveto = "", overwrite = True):
-	print("Yep.")
 	output = "-o \"" + saveto + "%(title)s-%(id)s.%(ext)s\""
 	if (overwrite or len(glob.glob(saveto + "*" + id + "*")) == 0) :
 		url = "http://www.youtube.com/watch?v="+id
@@ -84,32 +83,12 @@ def downloadFromIni(inipath="pythomat.ini") :
 			downloadAll(path,pattern,saveto,suffix=suff)
 		elif mode == "youtube" :
 			downloadYoutube(path,saveto)
-		elif mode == "prog2" :
-			downloadProg2(ini.get(section, "user"), base64.b64decode(ini.get(section, "pass")), saveto)
+		elif mode == "module" :
+			name = ini.get(section, "name")
+			module = __import__(name, globals = globals())
+			module.start(ini._sections[section])
 		else :
 			print ("Mode '" + mode + "' unsupported")
-
-# Downloads the Videos for Prog2
-def downloadProg2(user, password, saveto = "") :
-	br = Browser()
-	br.open("https://prog2.cdl.uni-saarland.de/users/login")	
-	br.select_form(nr=0)
-	br["data[User][username]"] = user
-	br["data[User][password]"] = password
-	response = br.submit()
-	br.open("https://prog2.cdl.uni-saarland.de/units")
-	for link in br.links(url_regex="/units/view/") :
-		page = br.follow_link(link)
-		content = page.read()
-		ids = []
-		endindex = 0
-		index = content.find("videoId: '",endindex)
-		while index > -1 :
-			endindex = content.find("'",index + 10)
-			ids.append(content[index+10:endindex])
-			index = content.find("videoId: '",endindex)
-		for id in ids :
-			downloadYoutube(id, saveto, False)
 
 # Main
 for arg in sys.argv[1:] :
