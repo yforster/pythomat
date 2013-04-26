@@ -9,17 +9,22 @@ import time
 import base64
 
 # Downloads a single file form url to path and names it filename
-def download(url, filename = "", saveto = "", check = True, suffix = ""):
+def download(url, filename = "", saveto = "", overwrite = 2, suffix = ""):
 	try :
 		if (filename == "") :
-			filename = filename = url.split("/")[-1]
+			filename = url.split("/")[-1]
+			filename = filename.split("?")[0]
 		do_download = True
-		if(check and os.path.isfile(saveto + filename)) :
+		if( not saveto.endswith("/")) :
+			saveto = saveto + "/"
+		if(overwrite == 2 and os.path.isfile(saveto + filename)) :
 			br = Browser()
 			br.open(url)
 			remote_time = time.strptime(br.response().info()["last-modified"], "%a, %d %b %Y %H:%M:%S GMT")
 			local_time  = time.gmtime((os.stat(saveto + filename + suffix).st_mtime))
 			do_download = (remote_time > local_time)
+		elif (overwrite == 0 and os.path.isfile(saveto + filename)) :
+			do_download = False
 		if(do_download) :
 			br = Browser()
 			os.chdir(saveto)
@@ -31,21 +36,21 @@ def download(url, filename = "", saveto = "", check = True, suffix = ""):
 		print("Failed: " + url)
 
 # Downloads all given urls via download(...)
-def batchDownload(urls):
+def batchDownload(urls, overw = 2):
     for url in urls :
-        download(url, check = True)    
+        download(url, overwrite = overw)    
 	        
 # Downloads all files with links containing pattern on path to destpath
-def downloadAll(url ,pattern = "", saveto = "", suffix = "") :
+def downloadAll(url ,pattern = "", saveto = "", overwrite = 2, suffix = "") :
 	br = Browser()
 	br.open(url)
 	for link in br.links(url_regex=pattern) :
 		if(link.url.startswith("http://")) :
-			download(link.url, "", saveto, True, suffix)
+			download(link.url, "", saveto, overwrite, suffix)
 		elif(link.url.startswith("/")) :
-			download(link.base_url[:link.base_url.find("/",8)] + link.url, "", saveto , True, suffix)
+			download(link.base_url[:link.base_url.find("/",8)] + link.url, "", saveto , overwrite, suffix)
 		else :
-			download(link.base_url[:link.base_url.rfind("/")+1] + link.url, "", saveto, True, suffix)
+			download(link.base_url[:link.base_url.rfind("/")+1] + link.url, "", saveto, overwrite, suffix)
 
 # Downloads YouTuve-Video with id to saveto and overwrites (or not)
 def downloadYoutube(id, saveto = "", overwrite = True):
@@ -65,6 +70,10 @@ def downloadFromIni(inipath="pythomat.ini") :
 			path = ""
 		saveto = ini.get(section, "saveto")
 		try :
+			overwrite = ini.getint(section, "overwrite")
+		except:
+			overwrite = 2
+		try :
 			mode = ini.get(section, "mode")
 		except :
 			mode = "single"
@@ -73,16 +82,16 @@ def downloadFromIni(inipath="pythomat.ini") :
 				name = ini.get(section, "name")
 			except :
 				name = ""
-			download(path,name,saveto,check = True)
+			download(path,name,saveto,overwrite)
 		elif mode == "batch" :
 			pattern = ini.get(section,"pattern")
 			try :
 				suff = ini.get(section, "suffix")
 			except:
 				suff = ""
-			downloadAll(path,pattern,saveto,suffix=suff)
+			downloadAll(path,pattern,saveto,overwrite,suffix=suff)
 		elif mode == "youtube" :
-			downloadYoutube(path,saveto)
+			downloadYoutube(path,saveto, not overwrite == 1)
 		elif mode == "module" :
 			name = ini.get(section, "name")
 			module = __import__(name, globals = globals())
