@@ -15,8 +15,9 @@ def start(items) :
 	br["data[User][username]"] = user
 	br["data[User][password]"] = password
 	response = br.submit()
-	br.open("https://prog2.cdl.uni-saarland.de/units")
-	for link in br.links(url_regex="/units/view/") :
+	p = br.open("https://prog2.cdl.uni-saarland.de/units")
+	dummy = p.read()
+	for link in br.links(url_regex = "/units/view") :
 		page = br.follow_link(link)
 		content = page.read()
 		ids = []
